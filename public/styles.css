@@ -1618,6 +1618,10 @@ button:focus-visible {
   animation: selection-in 0.22s ease both;
 }
 
+.selection-banner[hidden] {
+  display: none;
+}
+
 @keyframes selection-in { from { opacity: 0; transform: translateY(12px); } }
 
 .selection-banner > span:first-child {
