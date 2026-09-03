@@ -1,0 +1,32 @@
+{
+  "name": "Hydraulix – Dr. Drucks Werkstatt",
+  "short_name": "Hydraulix",
+  "description": "Logische Hydraulik-Puzzles in einer schrägen Comic-Werkstatt.",
+  "lang": "de-DE",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f2ead7",
+  "theme_color": "#183248",
+  "icons": [
+    {
+      "src": "assets/hydraulix-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/hydraulix-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/hydraulix-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

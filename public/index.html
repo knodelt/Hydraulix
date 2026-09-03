@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#183248" />
+    <meta name="description" content="Hydraulix – die verrückte Comic-Werkstatt für logische Hydraulik-Puzzles." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/hydraulix-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/hydraulix-icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Hydraulix – Comic-Werkstatt</title>
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <button id="brandButton" class="brand" type="button" aria-label="Zur Auftragsübersicht">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M32 4C21 19 12 29 12 41a20 20 0 0 0 40 0C52 29 43 19 32 4Z"/><path class="brand-shine" d="M24 46c-4-6-1-13 3-18"/></svg>
+          </span>
+          <span><b>HYDRAULIX</b><small>Dr. Drucks Werkstatt</small></span>
+        </button>
+
+        <div class="top-stats" aria-label="Spielfortschritt">
+          <div class="stat-chip" title="Verdiente Schrauben">
+            <span aria-hidden="true">🔩</span><b id="totalBolts">0</b>
+          </div>
+          <div class="stat-chip" title="Abgeschlossene Aufträge">
+            <span aria-hidden="true">✓</span><b><span id="completedCount">0</span>/<span id="missionCount">5</span></b>
+          </div>
+          <button id="soundButton" class="icon-button" type="button" aria-label="Töne ein- oder ausschalten" aria-pressed="true">♪</button>
+        </div>
+      </header>
+
+      <main>
+        <section id="homeScreen" class="screen active" aria-labelledby="homeTitle">
+          <section class="hero comic-panel">
+            <div class="hero-copy">
+              <p class="eyebrow">Willkommen in der schrägsten Werkstatt der Stadt</p>
+              <h1 id="homeTitle">Hier fehlt nicht nur<br /><span>der richtige Druck.</span></h1>
+              <p>Finde Fehler, tausche Bauteile und bring verrückte Maschinen wieder zum Schnurren. Logisch – aber garantiert ohne Tabellenbuch-Prüfung.</p>
+              <div class="hero-actions">
+                <button id="continueButton" class="primary-button big-button" type="button">
+                  <span id="continueButtonText">Ersten Auftrag starten</span><span aria-hidden="true">→</span>
+                </button>
+                <button id="howToButton" class="secondary-button" type="button">So wird gespielt</button>
+              </div>
+            </div>
+
+            <div class="hero-art" aria-label="Dr. Druck in seiner Werkstatt">
+              <div class="speech-bubble">Öl gut.<br />Alles gut!</div>
+              <div class="mascot">
+                <div class="helmet"><span>H</span></div>
+                <div class="mascot-head"><i></i><i></i><b></b></div>
+                <div class="mascot-body"><span class="overall-pocket">🔧</span></div>
+                <div class="mascot-arm left"></div>
+                <div class="mascot-arm right"></div>
+              </div>
+              <div class="hero-pipe pipe-a"></div>
+              <div class="hero-pipe pipe-b"></div>
+              <div class="oil-splat splat-one"></div>
+              <div class="oil-splat splat-two"></div>
+            </div>
+          </section>
+
+          <section class="mission-section" aria-labelledby="missionTitle">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Auftragsbrett</p>
+                <h2 id="missionTitle">Was klappert heute?</h2>
+              </div>
+              <button id="resetButton" class="text-button" type="button">Fortschritt zurücksetzen</button>
+            </div>
+            <div id="missionGrid" class="mission-grid"></div>
+          </section>
+
+          <section class="logic-strip comic-panel" aria-label="Spielprinzip">
+            <div><span>1</span><b>Beobachten</b><small>Symptome und Messwerte prüfen</small></div>
+            <i aria-hidden="true">→</i>
+            <div><span>2</span><b>Schrauben</b><small>Leitungen und Ventile tauschen</small></div>
+            <i aria-hidden="true">→</i>
+            <div><span>3</span><b>Testen</b><small>Druck drauf und Daumen drücken</small></div>
+          </section>
+        </section>
+
+        <section id="gameScreen" class="screen" aria-labelledby="missionName">
+          <div class="game-toolbar">
+            <button id="backButton" class="back-button" type="button"><span aria-hidden="true">←</span> Auftragsbrett</button>
+            <div class="mission-heading">
+              <span id="missionNumber" class="level-pill">Auftrag 1</span>
+              <h1 id="missionName">Der müde Hoflift</h1>
+            </div>
+            <div class="score-box" title="Je weniger Fehlversuche und Hinweise, desto höher die Belohnung.">
+              <small>Belohnung</small><b><span id="liveReward">300</span> 🔩</b>
+            </div>
+          </div>
+
+          <div class="game-layout">
+            <aside id="briefingPanel" class="side-panel briefing-panel comic-panel">
+              <div class="panel-title"><span aria-hidden="true">📋</span><div><small>Reparaturauftrag</small><h2>Was ist los?</h2></div></div>
+              <div class="customer-note">
+                <div id="customerAvatar" class="customer-avatar">HB</div>
+                <p id="missionBrief">Der Hoflift hebt nur noch die Frühstücksdose. Und dabei klingt er wie ein hungriger Elch!</p>
+              </div>
+
+              <div class="symptom-box">
+                <small>Gemeldete Symptome</small>
+                <ul id="symptomList"></ul>
+              </div>
+
+              <div class="objective-box">
+                <small>Dein Ziel</small>
+                <p id="missionGoal">Bringe den Zylinder wieder bis zur grünen Markierung.</p>
+              </div>
+
+              <div class="attempt-row">
+                <span>Testläufe</span><b id="attemptCount">0</b>
+              </div>
+              <button id="hintButton" class="hint-button" type="button"><span aria-hidden="true">💡</span> Kleinen Hinweis holen <small>−25 🔩</small></button>
+              <div id="hintText" class="hint-text" hidden></div>
+            </aside>
+
+            <section class="workbench comic-panel" aria-label="Hydraulik-Prüfstand">
+              <div class="machine-stage">
+                <div class="stage-label">KUNDENMASCHINE</div>
+                <div id="machineIllustration" class="machine-illustration"></div>
+                <div id="machineBubble" class="machine-bubble">Bitte nicht wieder mit dem Hammer!</div>
+              </div>
+
+              <div id="hydraulicBoard" class="hydraulic-board">
+                <div class="board-header">
+                  <div><small>Vereinfachter Prüfstand</small><b>HYDRAULIK-KREISLAUF</b></div>
+                  <div id="systemStatus" class="system-status idle"><i></i><span>Bereit zur Diagnose</span></div>
+                </div>
+
+                <div id="circuit" class="circuit" aria-label="Interaktiver Hydraulikkreislauf">
+                  <svg class="pipe-layer" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="pipe casing" d="M185 435 H290 V345 H430" />
+                    <path id="supplyFlowA" class="pipe fluid supply" d="M185 435 H290 V345 H430" />
+                    <path class="pipe casing" d="M570 345 H680 V205 H800" />
+                    <path id="supplyFlowB" class="pipe fluid supply" d="M570 345 H680 V205 H800" />
+                    <path class="pipe casing" d="M800 255 H720 V455 H570" />
+                    <path id="returnFlowA" class="pipe fluid return" d="M800 255 H720 V455 H570" />
+                    <path class="pipe casing" d="M430 455 H335 V495 H155" />
+                    <path id="returnFlowB" class="pipe fluid return" d="M430 455 H335 V495 H155" />
+                    <path class="pipe casing thin" d="M290 345 V175 H360" />
+                    <path id="reliefFlow" class="pipe fluid relief" d="M290 345 V175 H360" />
+                    <path class="pipe casing thin" d="M440 175 H500 V495 H335" />
+                    <path id="reliefReturn" class="pipe fluid relief" d="M440 175 H500 V495 H335" />
+                  </svg>
+
+                  <div class="gauge" aria-label="Druckanzeige">
+                    <span class="gauge-title">DRUCK</span>
+                    <div class="gauge-face">
+                      <i class="tick t1"></i><i class="tick t2"></i><i class="tick t3"></i><i class="tick t4"></i><i class="tick t5"></i>
+                      <b id="gaugeNeedle" class="gauge-needle"></b><em></em>
+                    </div>
+                    <strong><span id="pressureValue">0</span> bar</strong>
+                  </div>
+
+                  <button id="reservoirButton" class="reservoir component-button" data-action="oil" type="button" aria-label="Öltank öffnen">
+                    <span class="tank-cap"></span>
+                    <span class="tank-window"><i id="oilVisual"></i></span>
+                    <b>ÖLTANK</b><small><span id="oilValue">0</span> Liter</small>
+                    <span class="tap-hint">antippen</span>
+                  </button>
+
+                  <button class="component-slot pump-slot" data-slot="pump" type="button"></button>
+                  <button class="component-slot supply-slot" data-slot="supply" type="button"></button>
+                  <button class="component-slot control-slot" data-slot="control" type="button"></button>
+                  <button class="component-slot return-slot" data-slot="return" type="button"></button>
+                  <button class="component-slot filter-slot" data-slot="filter" type="button"></button>
+                  <button class="component-slot relief-slot" data-slot="relief" type="button"></button>
+
+                  <div id="cylinder" class="cylinder">
+                    <div class="cylinder-body"><i id="pistonRod"></i></div>
+                    <b>ZYLINDER</b>
+                  </div>
+                </div>
+
+                <div id="selectionBanner" class="selection-banner" hidden>
+                  <span id="selectedPartIcon" aria-hidden="true"></span>
+                  <div><small>In der Hand</small><b id="selectedPartName">Druckschlauch</b></div>
+                  <span>Tippe jetzt den passenden Einbauplatz an.</span>
+                  <button id="cancelSelection" type="button" aria-label="Auswahl abbrechen">×</button>
+                </div>
+              </div>
+
+              <div class="test-controls">
+                <div class="test-copy"><b>Bereit für Druck?</b><span>Der Test zeigt, was deine Reparatur bewirkt.</span></div>
+                <button id="testButton" class="test-button" type="button"><span class="play-icon" aria-hidden="true">▶</span><span>TESTLAUF</span></button>
+              </div>
+            </section>
+
+            <aside id="partsPanel" class="side-panel parts-panel comic-panel">
+              <div class="panel-title"><span aria-hidden="true">🧰</span><div><small>Ersatzteillager</small><h2>Was darf’s sein?</h2></div></div>
+              <p class="parts-help">Teil antippen und danach am Prüfstand einbauen. Nicht jedes glänzende Teil ist auch richtig.</p>
+              <div id="partsRack" class="parts-rack"></div>
+              <div class="legend-box"><i></i><span><b>Werkstatt-Tipp:</b> Bauteile am Prüfstand antippen, um sie genauer anzusehen oder auszubauen.</span></div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="mobileActionBar" class="mobile-action-bar" hidden>
+      <div><small id="mobileSelectionLabel">Kein Teil ausgewählt</small><b id="mobileStatusLabel">Prüfstand bereit</b></div>
+      <button id="mobileTestButton" type="button"><span>▶</span> Testlauf</button>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <dialog id="howToDialog" class="game-dialog how-to-dialog">
+      <button class="dialog-close" data-close-dialog type="button" aria-label="Schließen">×</button>
+      <div class="dialog-kicker">Drei Schritte. Kein Meisterbrief.</div>
+      <h2>So rettest du eine Maschine</h2>
+      <div class="tutorial-steps">
+        <article><span>👀</span><b>1. Auftrag lesen</b><p>Achte auf Geräusche, Bewegung, Druck und Öl. Darin verstecken sich die Hinweise.</p></article>
+        <article><span>🔧</span><b>2. Fehler beheben</b><p>Wähle Teile aus dem Lager, tippe den Einbauplatz an und stelle den Ölstand richtig ein.</p></article>
+        <article><span>💥</span><b>3. Testlauf wagen</b><p>Die Anlage reagiert sofort. Fehlschläge liefern neue Hinweise und kosten nur etwas Belohnung.</p></article>
+      </div>
+      <p class="tutorial-note"><b>Wichtig:</b> Hydraulix bildet die Grundlogik spielerisch ab. Es ist keine Anleitung für Arbeiten an echten Hydraulikanlagen.</p>
+      <button class="primary-button dialog-action" data-close-dialog type="button">Verstanden – Druck drauf!</button>
+    </dialog>
+
+    <dialog id="partDialog" class="game-dialog part-dialog">
+      <button class="dialog-close" data-close-dialog type="button" aria-label="Schließen">×</button>
+      <div id="partDialogIcon" class="dialog-part-icon"></div>
+      <div class="dialog-kicker" id="partDialogSlot">Bauteil prüfen</div>
+      <h2 id="partDialogName">Standardpumpe P-40</h2>
+      <p id="partDialogDescription"></p>
+      <div id="partDialogClue" class="inspection-clue"></div>
+      <div class="dialog-actions">
+        <button id="removePartButton" class="danger-button" type="button">Teil ausbauen</button>
+        <button class="secondary-button" data-close-dialog type="button">Drin lassen</button>
+      </div>
+    </dialog>
+
+    <dialog id="oilDialog" class="game-dialog oil-dialog">
+      <button class="dialog-close" data-close-dialog type="button" aria-label="Schließen">×</button>
+      <div class="oil-can" aria-hidden="true"><span></span><i>ÖL</i></div>
+      <div class="dialog-kicker">Tankstation</div>
+      <h2>Wie viel Öl darf rein?</h2>
+      <p>Zu wenig Öl lässt die Pumpe Luft ziehen. Zu viel macht aus der Werkstatt eine Rutschbahn.</p>
+      <div class="oil-meter"><div><i id="oilDialogFill"></i></div><b><span id="oilDialogValue">0</span> Liter</b></div>
+      <div class="oil-actions">
+        <button id="drainOilButton" class="secondary-button" type="button">− 10 Liter</button>
+        <button id="addOilButton" class="primary-button" type="button">+ 10 Liter</button>
+      </div>
+      <small class="oil-footnote">Die richtige Menge musst du aus Auftrag, Markierungen und Testlauf ableiten.</small>
+    </dialog>
+
+    <dialog id="testDialog" class="game-dialog test-dialog">
+      <div id="testResultBadge" class="result-badge">TESTBERICHT</div>
+      <h2 id="testResultTitle">Da stimmt noch etwas nicht.</h2>
+      <p id="testResultSummary"></p>
+      <div id="testFindings" class="test-findings"></div>
+      <button id="testResultButton" class="primary-button dialog-action" type="button">Zurück an die Werkbank</button>
+    </dialog>
+
+    <dialog id="completeDialog" class="game-dialog complete-dialog">
+      <div class="victory-burst" aria-hidden="true"><span>★</span></div>
+      <div class="dialog-kicker">Auftrag erledigt!</div>
+      <h2 id="completeTitle">Die Maschine schnurrt wieder.</h2>
+      <div id="starRating" class="star-rating" aria-label="Bewertung"></div>
+      <div class="reward-total"><small>Deine Belohnung</small><b><span id="earnedBolts">0</span> 🔩</b></div>
+      <p id="lessonText" class="lesson-text"></p>
+      <div class="dialog-actions stacked-mobile">
+        <button id="nextMissionButton" class="primary-button" type="button">Nächster Auftrag →</button>
+        <button id="completeHomeButton" class="secondary-button" type="button">Zum Auftragsbrett</button>
+      </div>
+    </dialog>
+
+    <dialog id="confirmResetDialog" class="game-dialog confirm-dialog">
+      <div class="dialog-kicker">Werkstatt auf Anfang?</div>
+      <h2>Fortschritt wirklich löschen?</h2>
+      <p>Alle Sterne, Schrauben und gelösten Aufträge werden auf diesem Gerät zurückgesetzt.</p>
+      <div class="dialog-actions">
+        <button id="confirmResetButton" class="danger-button" type="button">Ja, neu starten</button>
+        <button class="secondary-button" data-close-dialog type="button">Abbrechen</button>
+      </div>
+    </dialog>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

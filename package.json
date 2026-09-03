@@ -1,0 +1,13 @@
+{
+  "name": "hydraulix",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Comic-Hydraulik-Puzzlespiel für Cloudflare Workers",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.33.2"
+  }
+}
